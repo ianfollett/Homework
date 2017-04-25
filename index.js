@@ -25,9 +25,10 @@ app.get('/about', function(req, res) {
     res.render('about');
 });
 
-app.get('/get', function(req, res){
-    console.log(req.query); // display parsed querystring object
-    
+app.get('/get', function(req,res){
+    //var result = movies.get(req.query.title);
+    res.render('details', { result: movies.get(req.query) });
+    //res.render('details', {title: result.title, result: result });
 });
 
 
@@ -57,8 +58,9 @@ app.post('/get', function(req,res){
 
 
 
+/*
 // send content of 'home' view
 app.get('/get', function(req,res){
     var result = movies.get(req.query.title);
     res.render('details', {title: "Pulp Fiction", result: result });
-});
+});*/
