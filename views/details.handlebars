@@ -1,13 +1,10 @@
-{{result}}
-
-
-<!--
-<h2>Details for {{title}}</h2>
+<h1>{{title}}</h1>
 {{#if result}}
-    <li>Title: {{ result.title }}
     <li>Director: {{ result.director }}
+    <li>Genre: {{ result.genre }}</li>
     <li>Year: {{ result.year }}
+
 {{else}}
-        not found
-{{/if}}&ndash;&gt;
--->
+        <h1>were not found. :-(</h1>
+{{/if}}
+
