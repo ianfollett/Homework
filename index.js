@@ -13,7 +13,9 @@ app.use(require("body-parser").urlencoded({extended: true})); // parse form subm
 
 var handlebars = require("express-handlebars")
     .create({defaultLayout:'main'});
+
 app.engine('handlebars', handlebars.engine);
+
 app.set('view engine', 'handlebars');
 
 app.set('port', process.env.PORT || 3000);
@@ -30,6 +32,23 @@ app.post('/get', function (req, res) {
     console.log(req.body);
     var found = movies.get(req.body.title);
     res.render("details", {title: req.body.title, result: found});
+});
+
+app.get('/delete', function (req, res) {
+    let result = movies.delete(req.query.title);
+    res.render('delete', {title: req.query.title, result: result});
+});
+
+app.post('/add', function (req, res) {
+    res.type('text/html');
+    var newMovie = {
+        "title": req.body.title,
+        "year": req.body.year,
+        "director": req.body.director,
+        "genre": req.body.genre
+    };
+    var result = movies.add(newMovie);
+    res.render('detail', {title: req.body.title, result: result});
 });
 
 // Custom 404 page

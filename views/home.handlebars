@@ -1,5 +1,21 @@
 <form action="/get" method="POST">
-    Movie title:
+    Movie title to search for:
     <input type="text" name="title" id="title">
+    <input type="submit">
+</form>
+<form action="/delete" method="GET">
+    Movie title to delete:
+    <input type="text" name="title" id="title">
+    <input type="submit">
+</form>
+<form action="/add" method="POST">
+    Title:
+    <input type="text" name="title" id="title">
+    Year:
+    <input type="text" name="year" id="year">
+    Director:
+    <input type="text" name="director" id="director">
+    Genre:
+    <input type="text" name="genre" id="genre">
     <input type="submit">
 </form>
