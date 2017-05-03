@@ -48,7 +48,7 @@ app.post('/add', function (req, res) {
         "genre": req.body.genre
     };
     var result = movies.add(newMovie);
-    res.render('detail', {title: req.body.title, result: result});
+    res.render('add', {title: req.body.title, result: result});
 });
 
 // Custom 404 page

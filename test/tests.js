@@ -22,23 +22,24 @@ describe("Movies module", () => {
 
     it("delete removes requested movie", function () {
         var result = movies.delete("Pulp Fiction");
-        expect(result).to.deep.equal({oldLength: 5, newLength: 4});
+        //expect(result).to.deep.equal({newLength: true});
+        expect(result).to.equal(true);
     });
 
     it("delete fails with invalid movie", () => {
         var result = movies.delete("fake");
-        expect(result).to.deep.equal({oldLength: 4, newLength: 4});
+        expect(result).to.equal(false);
     });
 
     it("add adds given movie", function () {
         var newMovie = {"title": "Forest Gump", "year": "1994", "director": "Robert Zemeckis", "genre": "Comedy"};
         var result = movies.add(newMovie);
-        expect(result).to.deep.equal({oldLength: 4, newLength: 5});
+        expect(result).to.equal(true);
     });
 
     it("add fails with invalid movie", () => {
         var result = movies.delete("fake");
-        expect(result).to.deep.equal({oldLength: 5, newLength: 5});
+        expect(result).to.equal(false);
     });
 
 
