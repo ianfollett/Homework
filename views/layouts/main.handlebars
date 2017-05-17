@@ -1,9 +1,19 @@
+{{! servers rule, clients drool }}
 <!doctype html>
 <html>
 <head>
     <title>Ian's Homework</title> </head>
 <body>
-<header><h1>Ian's Homework</h1></header>
+<header><h1>Ian's Homework</h1>
+    <hr>
+</header>
+
 {{{body}}}
+<footer>
+    <hr>
+    <div class="nav">
+        {{#if movies}}{{else}}<a href="/">Home</a> |{{/if}}
+        <a href="/about">About</a></div>
+</footer>
 </body>
 </html>
