@@ -1,9 +1,9 @@
-<h1>{{title}}</h1>
+<h1>{{result.title}}</h1>
 {{#if result}}
     <li>Director: {{ result.director }}
     <li>Genre: {{ result.genre }}</li>
     <li>Year: {{ result.year }}
-        <h3><a href="/delete?title={{title}}">Delete: {{title}}</a></h3>
+        <h3><a href="/delete?title={{result.title}}">Delete</a></h3>
 {{else}}
         <h1>was not found. :-(</h1>
 {{/if}}

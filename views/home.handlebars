@@ -1,27 +1,13 @@
 <h2>Movies Home</h2>
 <h3>Search for a movie</h3>
-<form action="/get" method="GET">
+<form action="/get" method="POST">
     Title:
     <input type="text" name="title" id="title">
     <input type="submit">
 </form>
 
-<h3>Add a movie to array</h3>
-<form action="/add" method="POST">
-    Title:
-    <input type="text" name="title" id="title"><br>
-    Year:
-    <input type="text" name="year" id="year"><br>
-    Director:
-    <input type="text" name="director" id="director"><br>
-    Genre:
-    <input type="text" name="genre" id="genre">
-    <input type="submit">
-</form>
-
-
 {{#if movies}}
-    <h3>All the movies in the array:</h3>
+    <h3>All the movies in the database:</h3>
 {{else}}
     <h1>Zip. Zilch. Zero.</h1>
 {{/if}}
