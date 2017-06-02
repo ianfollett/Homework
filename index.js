@@ -8,6 +8,7 @@ let Movies = require('./models/movies.js');
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + '/public'));
 app.use(require("body-parser").urlencoded({extended: true}));
+app.use('/api', require('cors')());
 app.use((err, req, res, next) => {
     console.log(err)
 });
@@ -48,6 +49,7 @@ app.post('/get', (req, res, next) => {
 });
 
 
+
 app.get('/delete', (req, res) => {
     Movies.remove({title: req.query.title}, (err, result) => {
         if (err) return next(err);
@@ -61,7 +63,7 @@ app.get('/delete', (req, res) => {
 
 
 // API's
-app.get('/api/v1/movies/:title', (req, res, next) => {
+app.get('/api/movies/:title', (req, res, next) => {
     let title = req.params.title;
     console.log(title);
     Movies.findOne({title: title}, (err, result) => {
@@ -70,14 +72,14 @@ app.get('/api/v1/movies/:title', (req, res, next) => {
     });
 });
 
-app.get('/api/v1/movies', (req, res, next) => {
+app.get('/api/movies', (req, res, next) => {
     Movies.find((err, results) => {
         if (err || !results) return next(err);
         res.json(results);
     });
 });
 
-app.get('/api/v1/delete/:title', (req, res) => {
+app.get('/api/delete/:title', (req, res) => {
     Movies.remove({"title": req.params.title}, (err, result) => {
         if (err) {
             res.json({"result": err});
@@ -85,6 +87,21 @@ app.get('/api/v1/delete/:title', (req, res) => {
             // return # of items deleted
             res.json({"deleted": result.result.n});
         }
+    });
+});
+
+app.get('/api/add/:title/:year/:director/:genre', (req, res, next) => {
+    // find & update existing item, or add new
+    let title = req.params.title;
+    Movies.update({title: title}, {
+        title: title,
+        year: req.params.year,
+        director: req.params.director,
+        genre: req.params.genre
+    }, {upsert: true}, (err, result) => {
+        if (err) return next(err);
+        // nModified = 0 for new item, = 1+ for updated item
+        res.json({updated: result.nModified});
     });
 });
 
