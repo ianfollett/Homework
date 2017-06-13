@@ -24,45 +24,17 @@ app.set('view engine', 'handlebars');
 app.get('/', (req, res) => {
     Movies.find((err, movies) => {
         if (err) return next(err);
-        res.render('home', {movies: movies});
+        res.render('home', {movies: JSON.stringify(movies)});
     })
 });
 
-app.get('/about', function(req, res) {
+app.get('/about', (req, res) => {
+    res.type('text/html');
     res.render('about');
 });
 
-app.get('/get', (req, res, next) => {
-    Movies.findOne({title: req.query.title}, (err, movies) => {
-        if (err) return next(err);
-        res.type('text/html');
-        res.render('details', {result: movies});
-    });
-});
-
-app.post('/get', (req, res, next) => {
-    Movies.findOne({title: req.body.title}, (err, movies) => {
-        if (err) return next(err);
-        res.type('text/html');
-        res.render('details', {result: movies});
-    });
-});
-
-
-
-app.get('/delete', (req, res) => {
-    Movies.remove({title: req.query.title}, (err, result) => {
-        if (err) return next(err);
-        let deleted = result.result.n !== 0; // n will be 0 if no docs deleted
-        Movies.count((err, total) => {
-            res.type('text/html');
-            res.render('delete', {title: req.query.title, deleted: result.result.n !== 0, total: total});
-        });
-    });
-});
-
-
 // API's
+
 app.get('/api/movies/:title', (req, res, next) => {
     let title = req.params.title;
     console.log(title);
@@ -79,15 +51,39 @@ app.get('/api/movies', (req, res, next) => {
     });
 });
 
-app.get('/api/delete/:title', (req, res) => {
-    Movies.remove({"title": req.params.title}, (err, result) => {
-        if (err) {
-            res.json({"result": err});
-        } else {
-            // return # of items deleted
-            res.json({"deleted": result.result.n});
-        }
+app.get('/api/delete/:id', (req, res, next) => {
+    Movies.remove({"_id": req.params.id}, (err, result) => {
+        if (err) return next(err);
+        // return # of items deleted
+        res.json({"deleted": result.result.n});
     });
+});
+
+app.post('/api/add/', (req, res, next) => {
+    // find & update existing item, or add new
+    if (!req.body._id) { // insert new document
+        let movie = new Movies({
+            title: req.body.title,
+            year: req.body.year,
+            director: req.body.director,
+            genre: req.body.genre
+        });
+        movie.save((err, newMovie) => {
+            if (err) return next(err);
+            console.log(newMovie);
+            res.json({updated: 0, _id: newMovie._id});
+        });
+    } else { // update existing document
+        Movies.updateOne({_id: req.body._id}, {
+            title: req.body.title,
+            year: req.body.year,
+            director: req.body.director,
+            genre: req.body.genre
+        }, (err, result) => {
+            if (err) return next(err);
+            res.json({updated: result.nModified, _id: req.body._id});
+        });
+    }
 });
 
 app.get('/api/add/:title/:year/:director/:genre', (req, res, next) => {
@@ -113,17 +109,4 @@ app.use((req, res) => {
 
 app.listen(app.get('port'), () => {
     console.log('Express started');
-});
-
-
-// Custom 404 page
-app.use(function(req, res, next){ res.status(404);
-    res.render('404');
-});
-
-
-// Custom 500 page
-app.use(function(err, req, res, next){ console.error(err.stack);
-    res.status(500);
-    res.render('500');
 });
